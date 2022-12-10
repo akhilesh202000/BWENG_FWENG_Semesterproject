@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
 @RestController
 public class AuctionController {
     @Autowired
@@ -15,7 +16,6 @@ public class AuctionController {
     public AuctionController(AuctionRepository auctionRepository) {
         this.auctionRepository = auctionRepository;
     }
-
     @CrossOrigin
     @GetMapping("/auctions")
     public @ResponseBody Iterable<Auction> getAuctions() {
@@ -27,5 +27,4 @@ public class AuctionController {
     public @ResponseBody Auction postAuction(@RequestBody @Valid Auction newAuction) {
         return auctionRepository.save(newAuction);
     }
-
 }
