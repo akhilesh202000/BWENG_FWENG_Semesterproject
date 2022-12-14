@@ -1,5 +1,5 @@
 <template lang="">
-   <div>
+   <div v-if="role == 'user'||role == 'admin'">
       <h2>Product List</h2>
       <div class="flex flex-row">
          <BaseProduct
@@ -9,7 +9,6 @@
             v-bind:name="product.name"
             :key="index"/>
       </div>
-      
    </div>
 </template>
 <script>
@@ -23,7 +22,8 @@ export default {
          { id: 1, name: 'product1'},
          { id: 2, name: 'product2'},
          { id: 3, name: 'product3'},
-      ]
+      ],
+      role: localStorage.getItem('role')
    })
 }
 </script>

@@ -5,10 +5,11 @@ import RegisterView from '@/views/RegisterView';
 import LoginView from '@/views/LoginView';
 import HelpView from '@/views/HelpView';
 import ImprintView from '@/views/ImprintView';
+import ProfileVue from '@/views/ProfileVue';
 
 const routes = [
    {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: HomeView,
    },
@@ -18,7 +19,7 @@ const routes = [
       component: RegisterView,
    },
    {
-      path: '/login',
+      path: '/',
       name: 'login',
       component: LoginView,
    },
@@ -32,6 +33,12 @@ const routes = [
       name: 'imprint',
       component: ImprintView,
    },
+   {
+      path: '/profile',
+      name: 'Profile',
+      component: ProfileVue,
+   },
+
 ]
 
 const router = createRouter({

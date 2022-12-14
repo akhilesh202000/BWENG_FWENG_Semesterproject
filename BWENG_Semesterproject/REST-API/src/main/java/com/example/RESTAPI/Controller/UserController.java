@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Path;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -20,17 +22,17 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-   /* @CrossOrigin
-    @GetMapping("/users")
-    public Iterable<User> getUser() {
-        return userRepository.findAll();
-    }
+    /* @CrossOrigin
+     @GetMapping("/users")
+     public Iterable<User> getUser() {
+         return userRepository.findAll();
+     }
 
-    @CrossOrigin
-    @PostMapping("/users")
-    public User addUser(@RequestBody @Valid User user) {
-        return userRepository.save(user);
-    }*/
+     @CrossOrigin
+     @PostMapping("/users")
+     public User addUser(@RequestBody @Valid User user) {
+         return userRepository.save(user);
+     }*/
     @CrossOrigin
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUser() {
@@ -46,6 +48,27 @@ public class UserController {
     }
 
     @CrossOrigin
+
+    @GetMapping("/users/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        try {
+            //User user = userRepository.findByUsername(username);
+            User tmp = null;
+            List<User> userList = (List<User>) userRepository.findAll();
+            for (User user : userList
+            ) {
+                if (user.getUsername().equals(username))
+                    tmp = user;
+            }
+            if (tmp != null)
+                return new ResponseEntity<User>(tmp, HttpStatus.OK);
+            else return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
         try {
@@ -54,12 +77,21 @@ public class UserController {
             return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @CrossOrigin
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+    @DeleteMapping("/users/{username}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username) {
         try {
-            Optional<User> user = userRepository.findById(id);
-            user.ifPresent(userRepository::delete);
+           User tmp = null;
+            List<User> userList = (List<User>) userRepository.findAll();
+            for (User user : userList
+            ) {
+                if (user.getUsername().equals(username))
+                    tmp = user;
+            }
+            if (tmp!=null){
+                userRepository.delete(tmp);
+            }
             return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,12 +99,22 @@ public class UserController {
     }
 
     @CrossOrigin
-    @PatchMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    @PatchMapping("/users/{username}")
+    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User userDetails) {
         try {
-            User user = userRepository.findById(id).get();
-            user.setUsername(userDetails.getUsername());
-            return new ResponseEntity<User>(userRepository.save(user), HttpStatus.OK);
+            User tmp = null;
+            List<User> userList = (List<User>) userRepository.findAll();
+            for (User user : userList
+            ) {
+                if (user.getUsername().equals(username))
+                    tmp = user;
+            }
+            if (tmp != null) {
+                tmp.setUsername(userDetails.getUsername());
+                tmp.setPassword(userDetails.getPassword());
+                tmp.setRole(userDetails.getRole());
+                return new ResponseEntity<User>(userRepository.save(tmp), HttpStatus.OK);
+            } else return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

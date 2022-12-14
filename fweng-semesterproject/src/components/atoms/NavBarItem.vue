@@ -1,5 +1,5 @@
 <template lang="">
-   <router-link :to="to" class="font-semibold p-2 hover:scale-125 text-black">{{text}}</router-link>
+   <router-link :to="to" class="font-semibold p-2 hover:scale-125 text-white">{{text}}</router-link>
 </template>
 <script>
 export default {

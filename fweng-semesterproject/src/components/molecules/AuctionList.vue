@@ -1,5 +1,5 @@
 <template lang="">
-   <div>
+   <div v-if="role == 'admin'">
       <h2>Auction List</h2>
       <div class="flex flex-row">
          <BaseAuction
@@ -22,7 +22,8 @@ export default {
          { id: 1, name: 'auction1'},
          { id: 2, name: 'auction2'},
          { id: 3, name: 'auction3'},
-      ]
+      ],
+      role:localStorage.getItem('role')
    })
 }
 </script>
